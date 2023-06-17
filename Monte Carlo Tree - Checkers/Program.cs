@@ -73,7 +73,7 @@
                 int x = int.Parse(Console.ReadLine());
                 //Console.WriteLine();
                 int y = int.Parse(Console.ReadLine());
-
+                //something
                 game.Move((x, y), (x, y));
 
 
