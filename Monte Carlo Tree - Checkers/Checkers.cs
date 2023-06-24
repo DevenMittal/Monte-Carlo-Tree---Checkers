@@ -161,22 +161,22 @@ namespace Monte_Carlo_Tree___Checkers
                         if (board[i][j] == Square.Me)
                         {
                             //top left of AI
-                            if (board[i - 1][j - 1] == Square.empty)
+                            if(WithinBoard(i-1, j-1) && board[i - 1][j - 1] == Square.empty)
                             {
                                 children.Add(new Checkers(MakeAMove(i - 1, j - 1), Math.Abs(Player - 1)));
                             }
                             //bottom left of AI With Enemy
-                            if (board[i - 1][j - 1] == Square.Me && board[i - 2][j - 2] == Square.empty)
+                            if (WithinBoard(i - 1, j - 1) && WithinBoard(i - 2, j - 2) && board[i - 1][j - 1] == Square.Me && board[i - 2][j - 2] == Square.empty)
                             {
-                                children.Add(new Checkers(MakeAMove(i + 2, j - 2, i + 1, j - 1), Math.Abs(Player - 1)));
+                                children.Add(new Checkers(MakeAMove(i - 2, j - 2, i - 1, j - 1), Math.Abs(Player - 1)));
                             }
                             //bottom right of AI
-                            if (board[i - 1][j + 1] == Square.empty)
+                            if (WithinBoard(i - 1, j + 1) && board[i - 1][j + 1] == Square.empty)
                             {
                                 children.Add(new Checkers(MakeAMove(i - 1, j + 1), Math.Abs(Player - 1)));
                             }
                             //bottom right of AI With Enemy
-                            if (board[i - 1][j + 1] == Square.Me && board[i - 2][j + 2] == Square.empty)
+                            if (WithinBoard(i - 1, j + 1) && WithinBoard(i - 2, j + 2) && board[i - 1][j + 1] == Square.Me && board[i - 2][j + 2] == Square.empty)
                             {
                                 children.Add(new Checkers(MakeAMove(i -2, j + 2, i - 1, j + 1), Math.Abs(Player - 1)));
                             }
@@ -188,6 +188,11 @@ namespace Monte_Carlo_Tree___Checkers
 
             
             return children.ToArray();
+        }
+        public bool WithinBoard(int x, int y)
+        {
+            if (x < 0 || x > 7 || y < 0 || y > 7) return false;
+            return true;
         }
     }
 }
