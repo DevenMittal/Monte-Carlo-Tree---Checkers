@@ -2,11 +2,23 @@
 {
     enum Square
     {
-        empty = 0,
-        AI = -1,
-        AIKing = -2,
-        Me = 1,
-        MeKing = 2
+       Up = 1,
+       Down = 2,
+       AI = 4,
+
+       King = Up | Down,
+
+       AIPiece = AI | Down,
+       AIKing = AI | King,
+
+       MePiece = Up,
+       MeKing = King,
+        
+
+
+       Empty = 0,
+       Player = 0
+        
 
     }
     internal class Program
@@ -16,17 +28,17 @@
         {
 
             Square[][] inputs = new Square[8][];
-            inputs[0] = new Square[] { Square.empty, Square.AI, Square.empty, Square.AI, Square.empty, Square.AI, Square.empty, Square.AI };
-            inputs[1] = new Square[] { Square.AI, Square.empty, Square.AI, Square.empty, Square.AI, Square.empty, Square.AI, Square.empty };
-            inputs[2] = new Square[] { Square.empty, Square.AI, Square.empty, Square.AI, Square.empty, Square.AI, Square.empty, Square.AI };
-            inputs[3] = new Square[] { Square.empty, Square.empty, Square.empty, Square.empty, Square.empty, Square.empty, Square.empty, Square.empty };
-            inputs[4] = new Square[] { Square.empty, Square.empty, Square.empty, Square.empty, Square.empty, Square.empty, Square.empty, Square.empty };
-            inputs[5] = new Square[] { Square.Me, Square.empty, Square.Me, Square.empty, Square.Me, Square.empty, Square.Me, Square.empty };
-            inputs[6] = new Square[] { Square.empty, Square.Me, Square.empty, Square.Me, Square.empty, Square.Me, Square.empty, Square.Me };
-            inputs[7] = new Square[] { Square.Me, Square.empty, Square.Me, Square.empty, Square.Me, Square.empty, Square.Me, Square.empty };
+            inputs[0] = new Square[] { Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece };
+            inputs[1] = new Square[] { Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty };
+            inputs[2] = new Square[] { Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece };
+            inputs[3] = new Square[] { Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty };
+            inputs[4] = new Square[] { Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty, Square.Empty };
+            inputs[5] = new Square[] { Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty };
+            inputs[6] = new Square[] { Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece };
+            inputs[7] = new Square[] { Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty };
 
 
-            Checkers root = new Checkers(inputs, 1);
+            Checkers root = new Checkers(inputs, Square.Player);
 
             Play game = new Play(root);
             while (game.IsGameOver() == State.StillPlaying)
@@ -44,12 +56,12 @@
                     for (int j = 0; j < 8; j++)
                     {
                         Square num = game.rootTemp.board[i][j];
-                        if (num == Square.AI)
+                        if (num.HasFlag(Square.AI))
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write(" () ");
                         }
-                        else if (num == Square.Me)
+                        else if (num.HasFlag(Square.MePiece))
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                             Console.Write(" () ");

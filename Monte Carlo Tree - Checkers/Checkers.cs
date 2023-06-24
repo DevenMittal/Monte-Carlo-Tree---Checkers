@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Monte_Carlo_Tree___Checkers
 {
-    internal class Checkers: IGamestate
+    internal class Checkers : IGamestate
     {
 
         public int Value { get; set; }
@@ -49,14 +51,14 @@ namespace Monte_Carlo_Tree___Checkers
         {
             get
             {
-                return (IsWin || IsTie || IsLoss) && GetChildren().Count() == 0;
+                return (IsWin || IsTie || IsLoss) && GetChildren().Length == 0;
             }
         }
 
         public Square[][] board;
-        public int Player;
+        public Square Player;
 
-        public Checkers(Square[][] board, int player)
+        public Checkers(Square[][] board, Square player)
         {
             this.board = board;
             Player = player;
@@ -72,32 +74,28 @@ namespace Monte_Carlo_Tree___Checkers
             {
                 for (int j = 0; j < board[0].Length; j++)
                 {
-                    if (board[i][j] == Square.AI)
+                    if (board[i][j].HasFlag(Square.AI))
                     {
                         foundAI = true;
                     }
-                    if (board[i][j] == Square.Me)
+                    else if (board[i][j].HasFlag(Square.MePiece))
                     {
                         foundMe = true;
                     }
-                }        
+                }
             }
             if (!foundAI) return 1;
             if (!foundMe) return -1;
-            if (GetChildren() == null)
+            if (GetChildren().Length == 0)
             {
-                if (Player == 0)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return -1;
-                }
+                if (Player == 0) return 1;
+                
+                else return -1;
+                
             }
             return 2;
         }
-        public Square[][] MakeAMove(int XMove, int YMove, int XEnemySpot = 10, int YEnemySpot = 10)
+        public Square[][] MakeAMove(int XPos, int YPos, int XMove, int YMove, int XEnemySpot = 10, int YEnemySpot = 10)
         {
             Square[][] boardClone = new Square[8][];
 
@@ -110,83 +108,64 @@ namespace Monte_Carlo_Tree___Checkers
                     boardClone[k][z] = board[k][z];
                 }
             }
-            boardClone[XMove][YMove] = Square.AI;
-
+            boardClone[XMove][YMove] = board[XPos][YPos];
+            boardClone[XPos][YPos] = Square.Empty;
             if (XEnemySpot != 10)
             {
-                boardClone[XEnemySpot][YEnemySpot] = Square.empty;   
+                boardClone[XEnemySpot][YEnemySpot] = Square.Empty;
             }
             return boardClone;
         }
         public IGamestate[] GetChildren()
         {
             List<IGamestate> children = new List<IGamestate>(0);
-
-            
             for (int i = 0; i < board.Length; i++)
             {
                 for (int j = 0; j < board[i].Length; j++)
-                {   
-                    //Player is AI
-                    if (Player == 0)
-                    {
-                        if (board[i][j] == Square.AI)
-                        {
-                            
+                {
+                    if ((board[i][j] & Square.AI) != Player) continue;
 
-                            //bottom left of AI
-                            if (board[i+1][j-1] == Square.empty)
-                            {
-                                children.Add(new Checkers(MakeAMove(i+1, j-1), Math.Abs(Player - 1)));
-                            }
-                            //bottom left of AI With Enemy
-                            if (board[i + 1][j - 1] == Square.Me && board[i+2][j-2] == Square.empty)
-                            {
-                                children.Add(new Checkers(MakeAMove(i+2, j-2, i+1, j-1), Math.Abs(Player - 1)));
-                            }
-                            //bottom right of AI
-                            if (board[i + 1][j + 1] == Square.empty)
-                            {
-                                children.Add(new Checkers(MakeAMove(i + 1, j + 1), Math.Abs(Player - 1)));
-                            }
-                            //bottom right of AI With Enemy
-                            if (board[i + 1][j + 1] == Square.Me && board[i + 2][j + 2] == Square.empty)
-                            {
-                                children.Add(new Checkers(MakeAMove(i + 2, j + 2, i + 1, j + 1), Math.Abs(Player - 1)));
-                            }
-                        }                       
-                    }
-                    if (Player == 1)
+                    void TryMakeMove(Point point)
                     {
-                        if (board[i][j] == Square.Me)
+                        int MoveX = i + point.X;
+                        int MoveY = i + point.Y;
+                        int EnemyX = i + 2 * point.X;
+                        int EnemyY = j + 2 * point.Y;
+
+                        if (WithinBoard(MoveX, MoveY))
                         {
-                            //top left of AI
-                            if(WithinBoard(i-1, j-1) && board[i - 1][j - 1] == Square.empty)
+                            if (board[MoveX][MoveY] == Square.Empty)
                             {
-                                children.Add(new Checkers(MakeAMove(i - 1, j - 1), Math.Abs(Player - 1)));
+                                children.Add(new Checkers(MakeAMove(i, j, MoveX, MoveY), Player ^ Square.AI));
+                                if(i==1 &&j==1)
+                                {
+                                    ;
+                                }
                             }
-                            //bottom left of AI With Enemy
-                            if (WithinBoard(i - 1, j - 1) && WithinBoard(i - 2, j - 2) && board[i - 1][j - 1] == Square.Me && board[i - 2][j - 2] == Square.empty)
+                            else if (WithinBoard(EnemyX, EnemyY) && (board[MoveX][MoveY] & Square.AI) == Player && board[EnemyX][EnemyY] == Square.Empty)
                             {
-                                children.Add(new Checkers(MakeAMove(i - 2, j - 2, i - 1, j - 1), Math.Abs(Player - 1)));
+                                children.Add(new Checkers(MakeAMove(i, j, MoveX, MoveY, EnemyX, EnemyY), Player ^ Square.AI));
+                                if (i == 1 && j == 1)
+                                {
+                                    ;
+                                }
                             }
-                            //bottom right of AI
-                            if (WithinBoard(i - 1, j + 1) && board[i - 1][j + 1] == Square.empty)
-                            {
-                                children.Add(new Checkers(MakeAMove(i - 1, j + 1), Math.Abs(Player - 1)));
-                            }
-                            //bottom right of AI With Enemy
-                            if (WithinBoard(i - 1, j + 1) && WithinBoard(i - 2, j + 2) && board[i - 1][j + 1] == Square.Me && board[i - 2][j + 2] == Square.empty)
-                            {
-                                children.Add(new Checkers(MakeAMove(i -2, j + 2, i - 1, j + 1), Math.Abs(Player - 1)));
-                            }
+                            
+                            
                         }
+                    }
+                    if (board[i][j].HasFlag(Square.Up))
+                    {
+                        TryMakeMove(new(1, -1));
+                        TryMakeMove(new(-1, -1));
+                    }
+                    if (board[i][j].HasFlag(Square.Down))
+                    {
+                        TryMakeMove(new(1, 1));
+                        TryMakeMove(new(-1, 1));
                     }
                 }
             }
-            
-
-            
             return children.ToArray();
         }
         public bool WithinBoard(int x, int y)

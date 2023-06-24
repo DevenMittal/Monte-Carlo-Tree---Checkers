@@ -39,16 +39,16 @@ namespace Monte_Carlo_Tree___Checkers
             {
                 if (Math.Abs(move.x - piece.x) == 1 && Math.Abs(move.y - piece.y) == 1 && move.x < piece.x)
                 {
-                    rootTemp.board[move.x][move.y] = Square.Me;
-                    rootTemp.board[piece.x][piece.y] = Square.empty;
+                    rootTemp.board[move.x][move.y] = Square.MePiece;
+                    rootTemp.board[piece.x][piece.y] = Square.Empty;
                 }
                 else if (Math.Abs(move.x - piece.x) == 2 && Math.Abs(move.y - piece.y) == 2 && move.x < piece.x)
                 {
                     if (move.y > piece.y && rootTemp.board[piece.x - 1][piece.y + 1] == Square.AI)
                     {
-                        rootTemp.board[move.x][move.y] = Square.Me;
-                        rootTemp.board[piece.x][piece.y] = Square.empty;
-                        rootTemp.board[piece.x - 1][piece.y + 1] = Square.empty;
+                        rootTemp.board[move.x][move.y] = Square.MePiece;
+                        rootTemp.board[piece.x][piece.y] = Square.Empty;
+                        rootTemp.board[piece.x - 1][piece.y + 1] = Square.Empty;
                     }
                 }
                 else return false;
@@ -60,7 +60,7 @@ namespace Monte_Carlo_Tree___Checkers
                 return false;
             }
 
-            rootTemp.Player = 0;
+            rootTemp.Player = Square.AI;
             rootTemp = MCTS(1600, rootTemp, new Random());
 
             return true;

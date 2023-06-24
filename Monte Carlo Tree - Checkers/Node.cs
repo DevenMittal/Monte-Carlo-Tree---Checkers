@@ -23,9 +23,9 @@ namespace Monte_Carlo_Tree___Checkers
             State = startingState;
         }
         
-        public void GenerateChildren()
+        public Node<T>[] GenerateChildren()
         {
-            if (Children != null) return; 
+            if (Children != null) return Children; 
             IGamestate[] childrenStates = State.GetChildren();
             Node<T>[] childNodes = new Node<T>[childrenStates.Length];
             for (int i = 0; i < childNodes.Length; i++)
@@ -33,6 +33,7 @@ namespace Monte_Carlo_Tree___Checkers
                 childNodes[i] = new Node<T>((T)childrenStates[i]);
             }
             Children= childNodes;
+            return Children;
         }
 
         public double UCT()
