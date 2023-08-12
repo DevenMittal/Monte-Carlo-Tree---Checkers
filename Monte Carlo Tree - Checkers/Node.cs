@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monte_Carlo_Tree___Checkers
 {
-    internal class Node<T> where T : IGamestate
+    internal class Node<T> where T : IGamestate<T>
     {
         public double W { get; set; }
         public double N { get; set; }
@@ -26,11 +26,11 @@ namespace Monte_Carlo_Tree___Checkers
         public Node<T>[] GenerateChildren()
         {
             if (Children != null) return Children; 
-            IGamestate[] childrenStates = State.GetChildren();
+            T[] childrenStates = State.GetChildren();
             Node<T>[] childNodes = new Node<T>[childrenStates.Length];
             for (int i = 0; i < childNodes.Length; i++)
             {
-                childNodes[i] = new Node<T>((T)childrenStates[i]);
+                childNodes[i] = new Node<T>(childrenStates[i]);
             }
             Children= childNodes;
             return Children;

@@ -66,6 +66,7 @@ namespace Monte_Carlo_Tree___Checkers
                 return false;
             }
 
+
             rootTemp.Player = Square.AI;
             rootTemp = MCTS(1600, rootTemp, new Random());
 

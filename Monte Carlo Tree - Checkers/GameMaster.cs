@@ -6,12 +6,35 @@ using System.Threading.Tasks;
 
 namespace Monte_Carlo_Tree___Checkers
 {
-    internal class GameMaster<T> where T : IGamestate
+    
+    internal class GameMaster<T> where T : IGamestate<T>
     {
+
+        public static Node<T> rootNode;
+        //magic linq query of the gods: (rootNode.State.GetChildren().Where(m => m.IsEquivelent(topChild.State)).ToArray()[0] as Checkers).board
         public static T MCTS(int iterations, T startingState, Random random)
         {
             //Generate the monte-carlo tree
-            var rootNode = new Node<T>(startingState);
+            if (rootNode == null)
+            {
+                rootNode = new Node<T>(startingState);
+                rootNode.State.Reset();
+            }
+            else
+            {
+                bool wacky = false;
+                for (int i = 0; i < rootNode.Children.Length; i++)
+                {
+                    if (rootNode.Children[i].State.IsEquivelent(rootNode.State))
+                    {
+                        wacky = true;
+                        rootNode = rootNode.Children[i];
+                    }
+                }
+                if (!wacky)
+                    ;
+            }
+            
             for (int i = 0; i < iterations; i++)
             {
                 var selectedNode = Select(rootNode);
@@ -23,6 +46,7 @@ namespace Monte_Carlo_Tree___Checkers
             //return the best child
             var sortedChildren = rootNode.Children.OrderByDescending((state) => state.W);
             var topChild = sortedChildren.First();
+            rootNode = topChild;
             return topChild.State;
         }
 

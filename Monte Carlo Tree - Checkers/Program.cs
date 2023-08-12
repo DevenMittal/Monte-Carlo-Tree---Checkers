@@ -26,7 +26,10 @@
         
         static void Main(string[] args)
         {
+            //Helpful Query
 
+
+            //for long timings, maybe I keep regenerating boards in terms of size(maybe use struct instead of board) indexer to access indexes blike array. Instead of reducing objects, make them easier to manage.
             Square[][] inputs = new Square[8][];
             inputs[0] = new Square[] { Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece };
             inputs[1] = new Square[] { Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty, Square.AIPiece, Square.Empty };
@@ -61,7 +64,7 @@
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write(" () ");
                         }
-                        else if (num.HasFlag(Square.AIPiece))
+                        else if (num.HasFlag(Square.AIKing))
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write(" [] ");

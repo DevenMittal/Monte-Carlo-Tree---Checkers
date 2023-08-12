@@ -8,21 +8,11 @@ using System.Threading.Tasks;
 
 namespace Monte_Carlo_Tree___Checkers
 {
-    internal class Checkers : IGamestate
+    internal class Checkers : IGamestate<Checkers>
     {
-
+        List<Checkers> children;
         public int Value { get; set; }
-        public bool IsTie
-        {
-            get
-            {
-                if (WinnerCheck() == 0)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
+        public bool IsTie => WinnerCheck() == 0;
 
         public bool IsLoss
         {
@@ -51,7 +41,7 @@ namespace Monte_Carlo_Tree___Checkers
         {
             get
             {
-                return (IsWin || IsTie || IsLoss) && GetChildren().Length == 0;
+                return WinnerCheck() != 2 && GetChildren().Length == 0;
             }
         }
 
@@ -89,9 +79,9 @@ namespace Monte_Carlo_Tree___Checkers
             if (GetChildren().Length == 0)
             {
                 if (Player == 0) return 1;
-                
+
                 else return -1;
-                
+
             }
             return 2;
         }
@@ -120,69 +110,113 @@ namespace Monte_Carlo_Tree___Checkers
                 {
                     boardClone[XMove][YMove] = Square.MeKing;
                 }
+            }
+            if (XMove == 7)
+            {
                 if (boardClone[XMove][YMove] == Square.AIPiece)
                 {
                     boardClone[XMove][YMove] = Square.AIKing;
                 }
-            }    
+            }
             return boardClone;
         }
-        public IGamestate[] GetChildren()
+        public bool IsEquivelent(Checkers State)
         {
-            List<IGamestate> children = new List<IGamestate>(0);
-            for (int i = 0; i < board.Length; i++)
+            for (int j = 0; j < State.board.Length; j++)
             {
-                for (int j = 0; j < board[i].Length; j++)
+                for (int k = 0; k < State.board[j].Length; k++)
                 {
-                    if ((board[i][j] & Square.AI) != Player) continue;
+                    if (board[j][k] != State.board[j][k])
+                        return false;
+                }
+            }
+            return true;
+        }
+        public Checkers[] GetChildren()
+        {
+            if (children == null)
+            {
+                children = new List<Checkers>(0);
 
-                    void TryMakeMove(Point point)
+                for (int i = 0; i < board.Length; i++)
+                {
+                    for (int j = 0; j < board[i].Length; j++)
                     {
-                        int MoveX = i + point.X;
-                        int MoveY = j + point.Y;
-                        int EnemyX = i + 2 * point.X;
-                        int EnemyY = j + 2 * point.Y;
+                        if ((board[i][j] & Square.AI) != Player) continue;
 
-                        if (WithinBoard(MoveX, MoveY))
+                        void TryMakeMove(Point point)
                         {
-                            if (board[MoveX][MoveY] == Square.Empty)
+                            int MoveX = i + point.X;
+                            int MoveY = j + point.Y;
+                            int EnemyX = i + 2 * point.X;
+                            int EnemyY = j + 2 * point.Y;
+
+                            if (WithinBoard(MoveX, MoveY))
                             {
-                                children.Add(new Checkers(MakeAMove(i, j, MoveX, MoveY), Player ^ Square.AI));
-                                if(i==1 &&j==1)
+                                if (board[MoveX][MoveY] == Square.Empty)
                                 {
-                                    ;
+                                    children.Add(new Checkers(MakeAMove(i, j, MoveX, MoveY), Player ^ Square.AI));
+                                    if (i == 1 && j == 1)
+                                    {
+                                        ;
+                                    }
                                 }
-                            }
-                            else if (WithinBoard(EnemyX, EnemyY) && (board[MoveX][MoveY] & Square.AI) != Player && board[EnemyX][EnemyY] == Square.Empty)
-                            {
-                                children.Add(new Checkers(MakeAMove(i, j, EnemyX, EnemyY, MoveX, MoveY), Player ^ Square.AI));
-                                if (i == 1 && j == 1)
+                                else if (WithinBoard(EnemyX, EnemyY) && (board[MoveX][MoveY] & Square.AI) != Player && board[EnemyX][EnemyY] == Square.Empty)
                                 {
-                                    ;
+                                    children.Add(new Checkers(MakeAMove(i, j, EnemyX, EnemyY, MoveX, MoveY), Player ^ Square.AI));
+                                    if (i == 1 && j == 1)
+                                    {
+                                        ;
+                                    }
                                 }
+
+
                             }
-                            
-                            
                         }
-                    }
-                    if (board[i][j].HasFlag(Square.Up))
-                    {
-                        TryMakeMove(new(1, -1));
-                        TryMakeMove(new(-1, -1));
-                    }
-                    if (board[i][j].HasFlag(Square.Down))
-                    {
-                        TryMakeMove(new(1, 1));
-                        TryMakeMove(new(-1, 1));
+                        if (board[i][j].HasFlag(Square.Up))
+                        {
+                            TryMakeMove(new(-1, -1));
+                            TryMakeMove(new(-1, 1));
+                        }
+                        if (board[i][j].HasFlag(Square.Down))
+                        {
+                            TryMakeMove(new(1, 1));
+                            TryMakeMove(new(1, -1));
+                        }
                     }
                 }
             }
+            //else
+            //{
+            //    var kids = children;
+            //    children = null;
+            //    var goodKids = GetChildren();
+            //    for (int i = 0; i < kids.Count; i++)
+            //    {
+            //        var localKid = kids[i];
+            //        var localChild = children[i];
+
+            //        for (int j = 0; j < localKid.board.Length; j++)
+            //        {
+            //            for (int k = 0; k < localKid.board[j].Length; k++)
+            //            {
+            //                if (localKid.board[j][k] != localChild.board[j][k])
+            //                    return goodKids;
+            //            }
+            //        }
+            //    }
+            //}
             return children.ToArray();
         }
         public bool WithinBoard(int x, int y)
         {
             if (x < 0 || x > 7 || y < 0 || y > 7) return false;
             return true;
+        }
+
+        public void Reset()
+        {
+            children = null;
         }
     }
 }
