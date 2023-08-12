@@ -56,15 +56,25 @@
                     for (int j = 0; j < 8; j++)
                     {
                         Square num = game.rootTemp.board[i][j];
-                        if (num.HasFlag(Square.AI))
+                        if (num.HasFlag(Square.AIPiece))
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write(" () ");
+                        }
+                        else if (num.HasFlag(Square.AIPiece))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write(" [] ");
                         }
                         else if (num.HasFlag(Square.MePiece))
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                             Console.Write(" () ");
+                        }
+                        else if (num.HasFlag(Square.MeKing))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.Write(" [] ");
                         }
                         else
                         {

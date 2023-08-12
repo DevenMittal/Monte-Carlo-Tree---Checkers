@@ -44,11 +44,17 @@ namespace Monte_Carlo_Tree___Checkers
                 }
                 else if (Math.Abs(move.x - piece.x) == 2 && Math.Abs(move.y - piece.y) == 2 && move.x < piece.x)
                 {
-                    if (move.y > piece.y && rootTemp.board[piece.x - 1][piece.y + 1] == Square.AI)
+                    if (move.y > piece.y && rootTemp.board[piece.x - 1][piece.y + 1] == Square.AIPiece)
                     {
                         rootTemp.board[move.x][move.y] = Square.MePiece;
                         rootTemp.board[piece.x][piece.y] = Square.Empty;
                         rootTemp.board[piece.x - 1][piece.y + 1] = Square.Empty;
+                    }
+                    else if (move.y < piece.y && rootTemp.board[piece.x - 1][piece.y - 1] == Square.AIPiece)
+                    {
+                        rootTemp.board[move.x][move.y] = Square.MePiece;
+                        rootTemp.board[piece.x][piece.y] = Square.Empty;
+                        rootTemp.board[piece.x - 1][piece.y - 1] = Square.Empty;
                     }
                 }
                 else return false;

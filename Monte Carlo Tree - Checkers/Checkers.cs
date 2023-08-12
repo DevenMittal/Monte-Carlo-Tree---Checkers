@@ -114,6 +114,17 @@ namespace Monte_Carlo_Tree___Checkers
             {
                 boardClone[XEnemySpot][YEnemySpot] = Square.Empty;
             }
+            if (XMove == 0)
+            {
+                if (boardClone[XMove][YMove] == Square.MePiece)
+                {
+                    boardClone[XMove][YMove] = Square.MeKing;
+                }
+                if (boardClone[XMove][YMove] == Square.AIPiece)
+                {
+                    boardClone[XMove][YMove] = Square.AIKing;
+                }
+            }    
             return boardClone;
         }
         public IGamestate[] GetChildren()
@@ -128,7 +139,7 @@ namespace Monte_Carlo_Tree___Checkers
                     void TryMakeMove(Point point)
                     {
                         int MoveX = i + point.X;
-                        int MoveY = i + point.Y;
+                        int MoveY = j + point.Y;
                         int EnemyX = i + 2 * point.X;
                         int EnemyY = j + 2 * point.Y;
 
@@ -142,9 +153,9 @@ namespace Monte_Carlo_Tree___Checkers
                                     ;
                                 }
                             }
-                            else if (WithinBoard(EnemyX, EnemyY) && (board[MoveX][MoveY] & Square.AI) == Player && board[EnemyX][EnemyY] == Square.Empty)
+                            else if (WithinBoard(EnemyX, EnemyY) && (board[MoveX][MoveY] & Square.AI) != Player && board[EnemyX][EnemyY] == Square.Empty)
                             {
-                                children.Add(new Checkers(MakeAMove(i, j, MoveX, MoveY, EnemyX, EnemyY), Player ^ Square.AI));
+                                children.Add(new Checkers(MakeAMove(i, j, EnemyX, EnemyY, MoveX, MoveY), Player ^ Square.AI));
                                 if (i == 1 && j == 1)
                                 {
                                     ;
