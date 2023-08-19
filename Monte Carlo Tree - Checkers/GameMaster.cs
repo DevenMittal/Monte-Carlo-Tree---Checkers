@@ -29,6 +29,7 @@ namespace Monte_Carlo_Tree___Checkers
                     {
                         wacky = true;
                         rootNode = rootNode.Children[i];
+                        break;
                     }
                 }
                 if (!wacky)
@@ -77,7 +78,7 @@ namespace Monte_Carlo_Tree___Checkers
         static Node<T> Expand(Node<T> currentNode)
         {
             currentNode.GenerateChildren();
-
+   
             if (currentNode.Children.Length == 0) return currentNode;
             return currentNode.Children[0];
         }
@@ -99,10 +100,10 @@ namespace Monte_Carlo_Tree___Checkers
             Node<T> currentNode = simulatedNode;
             while (currentNode != null)
             {
-                value = -value;
                 currentNode.N++;
                 currentNode.W += value;
                 currentNode = currentNode.Parent;
+                value = -value;
             }
         }
 

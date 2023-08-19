@@ -20,10 +20,12 @@ namespace Monte_Carlo_Tree___Checkers
     {
 
         public Checkers rootTemp;
+        Random rand;
 
         public Play(Checkers root)
         {
             rootTemp = root;
+            rand = new Random();
         }
 
         public State IsGameOver()
@@ -68,7 +70,7 @@ namespace Monte_Carlo_Tree___Checkers
 
 
             rootTemp.Player = Square.AI;
-            rootTemp = MCTS(1600, rootTemp, new Random());
+            rootTemp = MCTS(1600, rootTemp, rand);
 
             return true;
         }

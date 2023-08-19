@@ -25,20 +25,23 @@ namespace Monte_Carlo_Tree___Checkers
         
         public Node<T>[] GenerateChildren()
         {
+            IsExpanded = true;
             if (Children != null) return Children; 
             T[] childrenStates = State.GetChildren();
             Node<T>[] childNodes = new Node<T>[childrenStates.Length];
             for (int i = 0; i < childNodes.Length; i++)
             {
                 childNodes[i] = new Node<T>(childrenStates[i]);
+                childNodes[i].Parent = this;
             }
-            Children= childNodes;
+            Children = childNodes;
             return Children;
         }
 
         public double UCT()
         {
-            return W / N + 1.5 * Math.Sqrt(Math.Log(Parent.N) / N);
+           // if (N == 0) return double.PositiveInfinity;
+            return W / N + 1.5 * Math.Sqrt(Math.Log(Parent.N, Math.E) / N);
         }
 
     }

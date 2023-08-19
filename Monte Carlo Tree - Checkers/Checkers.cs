@@ -10,7 +10,7 @@ namespace Monte_Carlo_Tree___Checkers
 {
     internal class Checkers : IGamestate<Checkers>
     {
-        List<Checkers> children;
+        public List<Checkers> children;
         public int Value { get; set; }
         public bool IsTie => WinnerCheck() == 0;
 

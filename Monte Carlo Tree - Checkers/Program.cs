@@ -41,6 +41,8 @@
             inputs[7] = new Square[] { Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty, Square.MePiece, Square.Empty };
 
 
+           
+
             Checkers root = new Checkers(inputs, Square.Player);
 
             Play game = new Play(root);
@@ -110,6 +112,22 @@
 
 
             }
+            Console.Clear();
+            if (game.IsGameOver() == State.IWin)
+            {
+                Console.WriteLine("You Win!");
+            }
+            if (game.IsGameOver() == State.Tie)
+            {
+                Console.WriteLine("You Tied");
+            }
+            if (game.IsGameOver() == State.AIWin)
+            {
+                Console.WriteLine("You Lose");
+            }
+
+            Console.ReadKey();
+
         }
     }
 }
