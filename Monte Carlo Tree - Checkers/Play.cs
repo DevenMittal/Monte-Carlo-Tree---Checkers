@@ -22,10 +22,14 @@ namespace Monte_Carlo_Tree___Checkers
         public Checkers rootTemp;
         Random rand;
 
-        public Play(Checkers root)
+        public Play(Checkers root) : this(root, new Random())
+        {
+        }
+
+        public Play(Checkers root, Random random)
         {
             rootTemp = root;
-            rand = new Random();
+            rand = random;
         }
 
         public State IsGameOver()

@@ -4,7 +4,13 @@ I wrote a console checkers experiment in C# to explore Monte Carlo tree search. 
 
 ## Demo
 
-https://github.com/user-attachments/assets/69a2d977-3a60-48f8-8063-53886623a15c
+Run a short, deterministic board-state demo without typing input:
+
+```sh
+dotnet run --project "Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj" -c Release -- --demo
+```
+
+The captured output is in [`docs/checkers-demo.txt`](docs/checkers-demo.txt). It shows the opening position, one legal human move, and the computer's response after 1,600 MCTS iterations. It is a snapshot, not a complete match.
 
 ## Search and game loop
 
@@ -43,7 +49,7 @@ The computer then searches and redraws the board. Keep entering moves, or use **
 
 ## Verification and limits
 
-The Release build passed on macOS. A scripted opening move produced a changed board after the computer’s reply. The process then reached end-of-input and threw because the console loop expects another integer. This checks one response, not a complete game or the correctness of every rule. Invalid input and end-of-input are not handled gracefully.
+The Release build passes on macOS. Interactive input now exits cleanly at end-of-input, and the demo uses a fixed seed so the captured board sequence can be reproduced. This checks one response, not a complete game or the correctness of every rule.
 
 ## Code guide
 

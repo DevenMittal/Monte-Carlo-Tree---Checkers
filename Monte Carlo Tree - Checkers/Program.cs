@@ -45,70 +45,31 @@
 
             Checkers root = new Checkers(inputs, Square.Player);
 
-            Play game = new Play(root);
+            bool demo = args.Any(argument => argument.Equals("--demo", StringComparison.OrdinalIgnoreCase));
+            Play game = new Play(root, demo ? new Random(20261101) : new Random());
+
+            if (demo)
+            {
+                Console.WriteLine("Monte Carlo Checkers demo");
+                Console.WriteLine("Initial board");
+                PrintBoard(game.rootTemp);
+                Console.WriteLine("Human move: (5, 0) -> (4, 1)");
+                bool moved = game.Move((5, 0), (4, 1));
+                Console.WriteLine(moved ? "AI response after 1,600 MCTS iterations" : "Move rejected");
+                PrintBoard(game.rootTemp);
+                return;
+            }
+
             while (game.IsGameOver() == State.StillPlaying)
             {
-                int xAxis = 0;
                 Console.Clear();
-                Console.WriteLine("____0____1____2____3____4____5____6____7____");
-
-
-                for (int i = 0; i < 8; i++)
+                PrintBoard(game.rootTemp);
+                if (!TryReadMove(out var piece, out var move))
                 {
-
-                    Console.Write($"{xAxis} |");
-                    xAxis++;
-                    for (int j = 0; j < 8; j++)
-                    {
-                        Square num = game.rootTemp.board[i][j];
-                        if (num.HasFlag(Square.AIPiece))
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write(" () ");
-                        }
-                        else if (num.HasFlag(Square.AIKing))
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write(" [] ");
-                        }
-                        else if (num.HasFlag(Square.MePiece))
-                        {
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.Write(" () ");
-                        }
-                        else if (num.HasFlag(Square.MeKing))
-                        {
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.Write(" [] ");
-                        }
-                        else
-                        {
-                            Console.Write("    ");
-                        }
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.Write("|");
-
-                    }
-                    Console.WriteLine();
-
-                    for (int k = 0; k < 43; k++)
-                    {
-                        Console.Write("_");
-                    }
-                    Console.WriteLine();
-
-
+                    Console.WriteLine("Input ended. Exiting.");
+                    return;
                 }
-                int currentX = int.Parse(Console.ReadLine());
-                int currentY = int.Parse(Console.ReadLine());
-                //Console.WriteLine(GameMaster.count);
-                int x = int.Parse(Console.ReadLine());
-                //Console.WriteLine();
-                int y = int.Parse(Console.ReadLine());
-                //something
-                
-
-                game.Move((currentX, currentY), (x, y));
+                if (!game.Move(piece, move)) Console.WriteLine("Move rejected.");
 
 
             }
@@ -126,8 +87,40 @@
                 Console.WriteLine("You Lose");
             }
 
-            Console.ReadKey();
+        }
 
+        static bool TryReadMove(out (int x, int y) piece, out (int x, int y) move)
+        {
+            piece = default;
+            move = default;
+            int[] values = new int[4];
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (!int.TryParse(Console.ReadLine(), out values[i])) return false;
+            }
+            piece = (values[0], values[1]);
+            move = (values[2], values[3]);
+            return true;
+        }
+
+        static void PrintBoard(Checkers game)
+        {
+            Console.WriteLine("    0   1   2   3   4   5   6   7");
+            for (int i = 0; i < 8; i++)
+            {
+                Console.Write($"{i} | ");
+                for (int j = 0; j < 8; j++)
+                {
+                    Square square = game.board[i][j];
+                    string token = square.HasFlag(Square.AIKing) ? "A*" :
+                        square.HasFlag(Square.AIPiece) ? "A " :
+                        square.HasFlag(Square.MeKing) ? "M*" :
+                        square.HasFlag(Square.MePiece) ? "M " : ". ";
+                    Console.Write(token + "| ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
         }
     }
 }
