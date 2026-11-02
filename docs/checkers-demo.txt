@@ -1,3 +1,10 @@
+/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Node.cs(21,16): warning CS8618: Non-nullable property 'Parent' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. [/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj]
+/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Node.cs(21,16): warning CS8618: Non-nullable property 'Children' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. [/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj]
+/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Checkers.cs(51,16): warning CS8618: Non-nullable field 'children' must contain a non-null value when exiting constructor. Consider declaring the field as nullable. [/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj]
+/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/GameMaster.cs(36,21): warning CS0642: Possible mistaken empty statement [/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj]
+/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/GameMaster.cs(60,43): warning CS8600: Converting null literal or possible null value to non-nullable type. [/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj]
+/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/GameMaster.cs(13,31): warning CS8618: Non-nullable field 'rootNode' must contain a non-null value when exiting constructor. Consider declaring the field as nullable. [/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj]
+/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Checkers.cs(219,24): warning CS8625: Cannot convert null literal to non-nullable reference type. [/Users/deven/Documents/ChatGPT/Project Showcase/Monte-Carlo-Tree---Checkers/Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.csproj]
 Monte Carlo Checkers demo
 Initial board
     0   1   2   3   4   5   6   7
@@ -19,6 +26,30 @@ AI response after 1,600 MCTS iterations
 3 | . | . | A | . | . | . | . | . | 
 4 | . | M | . | . | . | . | . | . | 
 5 | . | . | M | . | M | . | M | . | 
+6 | . | M | . | M | . | M | . | M | 
+7 | M | . | M | . | M | . | M | . | 
+
+Human move: (4, 1) -> (3, 0)
+AI response after 1,600 MCTS iterations
+    0   1   2   3   4   5   6   7
+0 | . | A | . | A | . | A | . | A | 
+1 | . | . | A | . | A | . | A | . | 
+2 | . | A | . | A | . | A | . | A | 
+3 | M | . | A | . | . | . | . | . | 
+4 | . | . | . | . | . | . | . | . | 
+5 | . | . | M | . | M | . | M | . | 
+6 | . | M | . | M | . | M | . | M | 
+7 | M | . | M | . | M | . | M | . | 
+
+Human move: (5, 2) -> (4, 3)
+AI response after 1,600 MCTS iterations
+    0   1   2   3   4   5   6   7
+0 | . | . | . | A | . | A | . | A | 
+1 | A | . | A | . | A | . | A | . | 
+2 | . | A | . | A | . | A | . | A | 
+3 | M | . | A | . | . | . | . | . | 
+4 | . | . | . | M | . | . | . | . | 
+5 | . | . | . | . | M | . | M | . | 
 6 | . | M | . | M | . | M | . | M | 
 7 | M | . | M | . | M | . | M | . | 
 

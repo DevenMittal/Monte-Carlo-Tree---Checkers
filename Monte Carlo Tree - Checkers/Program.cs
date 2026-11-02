@@ -53,10 +53,14 @@
                 Console.WriteLine("Monte Carlo Checkers demo");
                 Console.WriteLine("Initial board");
                 PrintBoard(game.rootTemp);
-                Console.WriteLine("Human move: (5, 0) -> (4, 1)");
-                bool moved = game.Move((5, 0), (4, 1));
-                Console.WriteLine(moved ? "AI response after 1,600 MCTS iterations" : "Move rejected");
-                PrintBoard(game.rootTemp);
+                var demoMoves = new[] { ((5, 0), (4, 1)), ((4, 1), (3, 0)), ((5, 2), (4, 3)) };
+                foreach (var demoMove in demoMoves)
+                {
+                    Console.WriteLine($"Human move: {demoMove.Item1} -> {demoMove.Item2}");
+                    bool moved = game.Move(demoMove.Item1, demoMove.Item2);
+                    Console.WriteLine(moved ? "AI response after 1,600 MCTS iterations" : "Move rejected");
+                    PrintBoard(game.rootTemp);
+                }
                 return;
             }
 
