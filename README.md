@@ -12,6 +12,8 @@ dotnet run --project "Monte Carlo Tree - Checkers/Monte Carlo Tree - Checkers.cs
 
 The captured output is in [`docs/checkers-demo.txt`](docs/checkers-demo.txt). It shows the opening position, one legal human move, and the computer's response after 1,600 MCTS iterations. It is a snapshot, not a complete match.
 
+There is also a short visual recording: [`docs/checkers-demo.mp4`](docs/checkers-demo.mp4).
+
 ## Search and game loop
 
 `GameMaster<T>` separates the search from the game-state interface. `Checkers` supplies board states and successors. The player-facing loop uses **1,600 search iterations** for the computer’s response.
