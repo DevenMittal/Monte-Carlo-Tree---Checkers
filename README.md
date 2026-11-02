@@ -14,7 +14,7 @@ The captured output is in [`docs/checkers-demo.txt`](docs/checkers-demo.txt). It
 
 There is also a short visual recording: [`docs/checkers-demo.mp4`](docs/checkers-demo.mp4).
 
-![Checkers demo: three turns](docs/checkers-demo-three-turns.gif)
+![Checkers demo: three turns](docs/checkers-demo-three-turns-v2.gif)
 
 ## Search and game loop
 
