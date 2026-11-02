@@ -14,6 +14,8 @@ The captured output is in [`docs/checkers-demo.txt`](docs/checkers-demo.txt). It
 
 There is also a short visual recording: [`docs/checkers-demo.mp4`](docs/checkers-demo.mp4).
 
+![Checkers demo](docs/checkers-demo.gif)
+
 ## Search and game loop
 
 `GameMaster<T>` separates the search from the game-state interface. `Checkers` supplies board states and successors. The player-facing loop uses **1,600 search iterations** for the computer’s response.
